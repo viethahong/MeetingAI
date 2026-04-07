@@ -37,9 +37,9 @@ def process_transcription(input_file, youtube_url, language, progress=gr.Progres
     
     try:
         def progress_callback(msg: str, p: float):
-            # Tùy biến lại các dòng thông báo của Whisper
+            # Luôn giữ text yêu cầu trong suốt quá trình chép lời
             display_msg = "Đang chép lời, đợi 1 chút...."
-            if "Summarizing" in msg:
+            if "Summarizing" in msg or "tóm tắt" in msg:
                 display_msg = "Đang tóm tắt nội dung..."
             progress(p, desc=display_msg)
             
@@ -138,8 +138,13 @@ def launch():
                     )
                     transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary", size="lg")
                     
-                    # Thành phần hiển thị loading
-                    loading_status = gr.HTML(visible=False)
+                    # Thành phần hiển thị loading gif cao cấp
+                    loading_status = gr.HTML("""
+                        <div class="loading-container" id="loading-spinner" style="display: none;">
+                            <img src="https://i.gifer.com/ZZ5H.gif" width="40" height="40" style="margin-right: 10px;">
+                            <span style="color: #666; font-weight: 500;">Hệ thống đang xử lý, vui lòng không tắt trình duyệt...</span>
+                        </div>
+                    """)
                     
                 with gr.Column(scale=6):
                     transcript_raw = gr.Textbox(
@@ -200,11 +205,17 @@ def launch():
                             summary_out = gr.Markdown(label="Kết quả tóm tắt")
 
         # --- EVENT HANDLING ---
-        # 1. Click Chép lời
+        # 1. Click Chép lời (Chuỗi event show loading -> process -> hide loading)
         transcribe_btn.click(
+            fn=lambda: gr.update(visible=True),
+            outputs=loading_status
+        ).then(
             fn=process_transcription,
             inputs=[input_file, youtube_url, lang_select],
             outputs=[transcript_raw, download_files]
+        ).then(
+            fn=lambda: gr.update(visible=False),
+            outputs=loading_status
         )
         
         # 2. Click Chuẩn bị nội dung tóm tắt (Manual)

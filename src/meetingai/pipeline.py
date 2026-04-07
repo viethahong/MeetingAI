@@ -22,7 +22,7 @@ def run_pipeline(
     progress_callback("Đang chuẩn bị file âm thanh...", 0.1)
     audio_path = prepare_audio(input_source, config.OUTPUT_DIR)
     
-    progress_callback("Đang chuyển đổi giọng nói thành văn bản bằng Whisper...", 0.3)
+    progress_callback("Đang chép lời, đợi 1 chút....", 0.3)
     transcription_result = transcribe(
         audio_path, 
         language=config.WHISPER_LANGUAGE, 
