@@ -138,6 +138,9 @@ def launch():
                     )
                     transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary", size="lg")
                     
+                    # Thành phần hiển thị loading
+                    loading_status = gr.HTML(visible=False)
+                    
                 with gr.Column(scale=6):
                     transcript_raw = gr.Textbox(
                         label="Kết quả chuyển đổi văn bản", 
