@@ -102,12 +102,12 @@ def launch():
                     transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary")
                     
                 with gr.Column():
-                    transcript_raw = gr.Code(
-                        label="Kết quả chuyển đổi văn bản (Bấm nút Copy ở góc trên bên phải)", 
-                        language="markdown",
-                        lines=12
+                    transcript_raw = gr.Textbox(
+                        label="Kết quả chuyển đổi văn bản", 
+                        lines=15
                     )
                     with gr.Row():
+                        copy_transcript_btn = gr.Button("📋 Copy kết quả", variant="secondary")
                         download_files = gr.File(label="Tải file .txt / .md về máy")
 
         # --- SECTION 2: TÓM TẮT ---
@@ -119,7 +119,8 @@ def launch():
                 with gr.TabItem("🔗 Gửi tới AI bên ngoài"):
                     gr.Markdown("Hệ thống sẽ chuẩn bị nội dung đi kèm yêu cầu tóm tắt. Bạn chỉ cần copy và dán vào các công cụ AI yêu thích.")
                     prepare_btn = gr.Button("📝 Chuẩn bị nội dung tóm tắt cho AI bên ngoài", variant="primary")
-                    manual_text = gr.Code(label="Nội dung đã được thêm yêu cầu tóm tắt (Copy nội dung này)", language="markdown", lines=5, interactive=False)
+                    manual_text = gr.Textbox(label="Nội dung đã được chuẩn bị", lines=5, interactive=False)
+                    copy_manual_btn = gr.Button("📋 Copy nội dung trên", variant="secondary")
                     
                     gr.Markdown("### 🚀 Mở nhanh các trình chat AI:", elem_classes="ai-links")
                     gr.HTML("""
@@ -178,6 +179,18 @@ def launch():
             fn=process_summarization,
             inputs=[transcript_raw, lang_select, llm_choice, llm_model, api_key],
             outputs=[summary_out]
+        )
+        
+        # 4. Copy logic (Client-side JS)
+        copy_transcript_btn.click(
+            fn=None,
+            inputs=[transcript_raw],
+            js="(text) => { navigator.clipboard.writeText(text); }"
+        )
+        copy_manual_btn.click(
+            fn=None,
+            inputs=[manual_text],
+            js="(text) => { navigator.clipboard.writeText(text); }"
         )
 
     demo.launch(server_name="0.0.0.0", server_port=7860, css=css)

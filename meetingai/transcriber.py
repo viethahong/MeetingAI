@@ -39,10 +39,15 @@ def transcribe(audio_path: Path, language: str, model: str) -> TranscriptionResu
                 language=language_code
             )
             
+            segments_data = result.get("segments", [])
+            formatted_text = "\n\n".join(seg.get("text", "").strip() for seg in segments_data if seg.get("text", "").strip())
+            if not formatted_text:
+                formatted_text = result.get("text", "")
+            
             return TranscriptionResult(
-                text=result.get("text", ""),
+                text=formatted_text,
                 language=result.get("language", language),
-                segments=result.get("segments", [])
+                segments=segments_data
             )
         except ImportError:
             logger.warning("mlx-whisper not installed or failed to import. Falling back to faster-whisper")
@@ -71,8 +76,10 @@ def transcribe(audio_path: Path, language: str, model: str) -> TranscriptionResu
             "text": segment.text
         })
         
+    formatted_text = "\n\n".join(chunk.strip() for chunk in text_chunks if chunk.strip())
+    
     return TranscriptionResult(
-        text=" ".join(text_chunks),
+        text=formatted_text,
         language=info.language,
         segments=segments
     )
