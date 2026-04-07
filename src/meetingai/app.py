@@ -80,6 +80,12 @@ def prepare_manual_copy(transcript):
         return ""
     return f"Tóm tắt những ý chính quan trọng trong nội dung sau:\n\n{transcript}"
 
+def show_copy_info(text):
+    if text and text.strip() != "":
+        gr.Info("✅ Đã copy vào clipboard thành công!")
+    else:
+        gr.Warning("⚠️ Không có nội dung để copy.")
+
 def launch():
     initial_settings = load_settings()
     
@@ -232,14 +238,14 @@ def launch():
             outputs=[summary_out]
         )
         
-        # 4. Copy logic (Client-side JS)
+        # 4. Copy logic (Client-side JS + Python Notification)
         copy_transcript_btn.click(
-            fn=None,
+            fn=show_copy_info,
             inputs=[transcript_raw],
             js=copy_js
         )
         copy_manual_btn.click(
-            fn=None,
+            fn=show_copy_info,
             inputs=[manual_text],
             js=copy_js
         )
