@@ -78,9 +78,26 @@ def launch():
     
     # CSS để làm đẹp giao diện
     css = """
-    .section-box { border: 1px solid #ddd; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-    .footer-note { font-size: 0.85em; color: #666; margin-top: 10px; }
-    .ai-links a { margin-right: 15px; text-decoration: none; color: #2196F3; font-weight: bold; }
+    .section-box { border: 1px solid #e5e7eb; padding: 25px; border-radius: 12px; margin-bottom: 25px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    .footer-note { font-size: 0.85em; color: #6b7280; margin-top: 10px; font-style: italic; }
+    .ai-links { margin-top: 10px; }
+    .ai-links a { display: inline-block; padding: 8px 16px; margin-right: 12px; border-radius: 8px; background: #f3f4f6; text-decoration: none; color: #2563eb; font-weight: 600; border: 1px solid #e5e7eb; transition: all 0.2s ease; }
+    .ai-links a:hover { background: #dbeafe; border-color: #bfdbfe; transform: translateY(-2px); }
+    """
+
+    copy_js = """
+    async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (e) {
+            const input = document.createElement('textarea');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+        }
+    }
     """
 
     with gr.Blocks(title="MeetingAI") as demo:
@@ -91,7 +108,7 @@ def launch():
             gr.Markdown("## 📋 GIAI ĐOẠN 1: CHÉP LỜI (TRANSCRIPTION)")
             
             with gr.Row():
-                with gr.Column():
+                with gr.Column(scale=4):
                     input_file = gr.File(label="Tải file Audio/Video lên")
                     youtube_url = gr.Textbox(label="Hoặc dán Link YouTube", placeholder="https://youtube.com/...")
                     lang_select = gr.Dropdown(
@@ -99,16 +116,16 @@ def launch():
                         value=initial_settings.get("language", "Vietnamese"), 
                         label="Ngôn ngữ audio"
                     )
-                    transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary")
+                    transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary", size="lg")
                     
-                with gr.Column():
+                with gr.Column(scale=6):
                     transcript_raw = gr.Textbox(
                         label="Kết quả chuyển đổi văn bản", 
-                        lines=15
+                        lines=16
                     )
                     with gr.Row():
-                        copy_transcript_btn = gr.Button("📋 Copy kết quả", variant="secondary")
-                        download_files = gr.File(label="Tải file .txt / .md về máy")
+                        copy_transcript_btn = gr.Button("📋 Copy kết quả văn bản", variant="secondary")
+                        download_files = gr.File(label="Tải file tài liệu về máy", file_count="multiple", height=80)
 
         # --- SECTION 2: TÓM TẮT ---
         with gr.Column(elem_classes="section-box"):
@@ -185,12 +202,12 @@ def launch():
         copy_transcript_btn.click(
             fn=None,
             inputs=[transcript_raw],
-            js="(text) => { navigator.clipboard.writeText(text); }"
+            js=copy_js
         )
         copy_manual_btn.click(
             fn=None,
             inputs=[manual_text],
-            js="(text) => { navigator.clipboard.writeText(text); }"
+            js=copy_js
         )
 
     demo.launch(server_name="0.0.0.0", server_port=7860, css=css)
