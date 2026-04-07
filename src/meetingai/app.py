@@ -251,7 +251,7 @@ def launch():
             js=copy_js
         )
 
-    demo.launch(server_name="0.0.0.0", server_port=7860, css=css)
+    demo.launch(server_name="0.0.0.0", server_port=7860, css=css, share=True)
 
 if __name__ == "__main__":
     launch()
