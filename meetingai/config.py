@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "llama3.1"
+    GEMINI_MODEL: str = "gemini-2.0-flash"
     WHISPER_MODEL: str = "large-v3-turbo"
     WHISPER_LANGUAGE: str = "Vietnamese"
     OUTPUT_DIR: Path = Path("./output")
