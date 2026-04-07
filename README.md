@@ -111,7 +111,7 @@ docker compose up --build
 
 ```text
 MeetingAI/
-├── src/meetingai/      # Mã nguồn chính
+├── meetingai/          # Mã nguồn chính
 │   ├── app.py          # Giao diện Web (Gradio)
 │   ├── cli.py          # Giao diện dòng lệnh (Click)
 │   ├── transcriber.py  # Xử lý Dual-Backend Whisper

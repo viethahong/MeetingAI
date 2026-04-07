@@ -4,6 +4,6 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 WORKDIR /app
 COPY pyproject.toml ./
 RUN uv sync
-COPY src/ src/
+COPY meetingai/ meetingai/
 EXPOSE 7860
 CMD ["uv", "run", "meetingai-ui"]
