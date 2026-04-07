@@ -1,0 +1,9 @@
+services:
+  meetingai:
+    build: .
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./output:/app/output
+    env_file:
+      - .env

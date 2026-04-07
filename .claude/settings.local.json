@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sysctl -n machdep.cpu.brand_string)",
+      "Bash(sw_vers -productVersion)",
+      "Bash(python3 -c \"import sys; print\\(sys.executable\\)\")"
+    ]
+  }
+}
