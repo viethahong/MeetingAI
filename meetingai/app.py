@@ -83,7 +83,7 @@ def launch():
     .ai-links a { margin-right: 15px; text-decoration: none; color: #2196F3; font-weight: bold; }
     """
 
-    with gr.Blocks(title="MeetingAI", css=css) as demo:
+    with gr.Blocks(title="MeetingAI") as demo:
         gr.Markdown("# 🎙️ MeetingAI: Chép lời & Tóm tắt chuyên nghiệp")
         
         # --- SECTION 1: CHÉP LỜI ---
@@ -104,8 +104,7 @@ def launch():
                 with gr.Column():
                     transcript_raw = gr.Textbox(
                         label="Kết quả chuyển đổi văn bản", 
-                        lines=12, 
-                        show_copy_button=True
+                        lines=12
                     )
                     with gr.Row():
                         download_files = gr.File(label="Tải file .txt / .md về máy")
@@ -118,7 +117,7 @@ def launch():
                 # Tab 1: Tóm tắt bằng AI bên ngoài
                 with gr.TabItem("🔗 Gửi tới AI bên ngoài"):
                     gr.Markdown("Hệ thống sẽ chuẩn bị nội dung đi kèm yêu cầu tóm tắt. Bạn chỉ cần copy và dán vào các công cụ AI yêu thích.")
-                    manual_text = gr.Textbox(label="Nội dung đã được thêm yêu cầu tóm tắt", lines=5, show_copy_button=True, interactive=False)
+                    manual_text = gr.Textbox(label="Nội dung đã được thêm yêu cầu tóm tắt", lines=5, interactive=False)
                     
                     gr.Markdown("### Mở nhanh các trình chat AI:", elem_classes="ai-links")
                     gr.HTML("""
@@ -181,7 +180,7 @@ def launch():
             outputs=[summary_out]
         )
 
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860, css=css)
 
 if __name__ == "__main__":
     launch()
