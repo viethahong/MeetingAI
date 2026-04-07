@@ -33,7 +33,7 @@ def process_transcription(input_file, youtube_url, language, progress=gr.Progres
         progress(p, desc=msg)
     
     # Text thông báo cụ thể khi bắt đầu
-    progress(0.05, desc="Đang chép lời, đợi 1 chút....")
+    progress(None, desc="Đang chép lời, đợi 1 chút....")
     
     try:
         def progress_callback(msg: str, p: float):
@@ -41,7 +41,7 @@ def process_transcription(input_file, youtube_url, language, progress=gr.Progres
             display_msg = "Đang chép lời, đợi 1 chút...."
             if "Summarizing" in msg or "tóm tắt" in msg:
                 display_msg = "Đang tóm tắt nội dung..."
-            progress(p, desc=display_msg)
+            progress(p if p == 1.0 else None, desc=display_msg)
             
         result = run_pipeline(input_source, config, progress_callback=progress_callback)
         # Chỉ trả về transcript raw và file download
@@ -96,10 +96,22 @@ def launch():
     .ai-links { margin-top: 10px; }
     .ai-links a { display: inline-block; padding: 8px 16px; margin-right: 12px; border-radius: 8px; background: #f3f4f6; text-decoration: none; color: #2563eb; font-weight: 600; border: 1px solid #e5e7eb; transition: all 0.2s ease; }
     .ai-links a:hover { background: #dbeafe; border-color: #bfdbfe; transform: translateY(-2px); }
-    /* Loading animation style */
-    .loading-container { display: flex; align-items: center; justify-content: center; margin-top: 10px; }
-    .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* Loading animation style from Uiverse.io by Fernando-sv */
+    .loading-container { display: flex; align-items: center; justify-content: center; margin-top: 10px; gap: 12px; }
+    .loader {
+      border: 4px solid rgba(0, 0, 0, .1);
+      border-left-color: #3498db;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      animation: spin89345 1s linear infinite;
+    }
+    @keyframes spin89345 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Hide Gradio progress bar */
+    .progress-container { display: none !important; }
     footer { display: none !important; }
     """
 
@@ -147,11 +159,11 @@ def launch():
                     
                     # Thành phần hiển thị loading gif cao cấp
                     loading_status = gr.HTML("""
-                        <div class="loading-container" id="loading-spinner" style="display: none;">
-                            <img src="https://i.gifer.com/ZZ5H.gif" width="40" height="40" style="margin-right: 10px;">
-                            <span style="color: #666; font-weight: 500;">Hệ thống đang xử lý, vui lòng không tắt trình duyệt...</span>
+                        <div class="loading-container" id="loading-spinner">
+                            <div class="loader"></div>
+                            <span style="color: #4b5563; font-weight: 500; font-family: sans-serif;">Hệ thống đang xử lý, vui lòng không tắt trình duyệt...</span>
                         </div>
-                    """)
+                    """, visible=False)
                     
                 with gr.Column(scale=6):
                     transcript_raw = gr.Textbox(

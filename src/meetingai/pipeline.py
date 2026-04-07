@@ -16,13 +16,13 @@ class PipelineResult:
 def run_pipeline(
     input_source: str, 
     config: Settings, 
-    progress_callback: Callable[[str, float], None] = lambda m, p: None
+    progress_callback: Callable[[str, Optional[float]], None] = lambda m, p: None
 ) -> PipelineResult:
     
-    progress_callback("Đang chuẩn bị file âm thanh...", 0.1)
+    progress_callback("Đang chuẩn bị file âm thanh...", None)
     audio_path = prepare_audio(input_source, config.OUTPUT_DIR)
     
-    progress_callback("Đang chép lời, đợi 1 chút....", 0.3)
+    progress_callback("Đang chép lời, đợi 1 chút....", None)
     transcription_result = transcribe(
         audio_path, 
         language=config.WHISPER_LANGUAGE, 
@@ -39,7 +39,7 @@ def run_pipeline(
     
     summary_text = None
     if config.LLM_BACKEND != "none":
-        progress_callback("Đang thiết lập báo cáo tóm tắt...", 0.7)
+        progress_callback("Đang thiết lập báo cáo tóm tắt...", None)
         try:
             summary_text = summarize(transcript_text, config)
             
@@ -50,7 +50,7 @@ def run_pipeline(
             output_files.append(md_output_path)
         except Exception as e:
             summary_text = f"⚠️ **Lỗi tạo tóm tắt**: {str(e)}\n\n*Tuy nhiên, Nội dung bóc băng (raw) vẫn được sinh ra thành công.*"
-            progress_callback("Bỏ qua mã tóm tắt do lỗi LLM, giữ text raw.", 0.9)
+            progress_callback("Bỏ qua mã tóm tắt do lỗi LLM, giữ text raw.", None)
         
     progress_callback("Hoàn thành!", 1.0)
     

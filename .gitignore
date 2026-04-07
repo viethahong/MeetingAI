@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 output/
 .DS_Store
+.gradio/
+*.zip
+.claude/
