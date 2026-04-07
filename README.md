@@ -21,10 +21,43 @@ MeetingAI là công cụ mã nguồn mở giúp chuyển đổi nội dung cuộ
 ### 1. Yêu cầu hệ thống
 Đảm bảo máy của bạn đã cài đặt `ffmpeg`, `uv`, và `yt-dlp`. 
 
-**Trên macOS (khuyên dùng):**
+#### 🍎 macOS (Apple Silicon / Intel)
 ```bash
 brew install ffmpeg uv yt-dlp
 ```
+
+#### 🪟 Windows
+1.  **Cài đặt `uv`**: Mở PowerShell và chạy:
+    ```powershell
+    powershell -c "irmo https://astral.sh/uv/install.ps1 | iex"
+    ```
+2.  **Cài đặt `ffmpeg`**: Khuyên dùng [Chocolatey](https://chocolatey.org/):
+    ```powershell
+    choco install ffmpeg
+    ```
+    Hoặc tải bản build sẵn tại [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) và thêm vào `PATH`.
+3.  **Cài đặt `yt-dlp`**:
+    ```powershell
+    pip install yt-dlp
+    ```
+
+#### 🐧 Linux (Ubuntu/Debian)
+```bash
+sudo apt update && sudo apt install ffmpeg
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+---
+
+## 💻 Khả năng tương thích (Compatibility)
+
+Dự án sử dụng cơ chế **Dual-Backend** để tối ưu hóa hiệu năng trên mọi thiết bị:
+
+| Phần cứng | Backend Whisper | Ghi chú |
+| :--- | :--- | :--- |
+| **Mac M1/M2/M3/M4** | `mlx-whisper` | Tốc độ nhanh nhất, tối ưu Unified Memory. |
+| **Windows / Linux / Mac Intel** | `faster-whisper` | Sử dụng CPU hoặc NVIDIA GPU (nếu có CUDA). |
+| **Docker** | `faster-whisper` | Chạy ổn định trên mọi môi trường container. |
 
 ### 2. Cài đặt dự án
 ```bash
