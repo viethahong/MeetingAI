@@ -102,8 +102,9 @@ def launch():
                     transcribe_btn = gr.Button("🚀 Bắt đầu chép lời", variant="primary")
                     
                 with gr.Column():
-                    transcript_raw = gr.Textbox(
-                        label="Kết quả chuyển đổi văn bản", 
+                    transcript_raw = gr.Code(
+                        label="Kết quả chuyển đổi văn bản (Bấm nút Copy ở góc trên bên phải)", 
+                        language="text",
                         lines=12
                     )
                     with gr.Row():
@@ -117,9 +118,10 @@ def launch():
                 # Tab 1: Tóm tắt bằng AI bên ngoài
                 with gr.TabItem("🔗 Gửi tới AI bên ngoài"):
                     gr.Markdown("Hệ thống sẽ chuẩn bị nội dung đi kèm yêu cầu tóm tắt. Bạn chỉ cần copy và dán vào các công cụ AI yêu thích.")
-                    manual_text = gr.Textbox(label="Nội dung đã được thêm yêu cầu tóm tắt", lines=5, interactive=False)
+                    prepare_btn = gr.Button("📝 Chuẩn bị nội dung tóm tắt cho AI bên ngoài", variant="primary")
+                    manual_text = gr.Code(label="Nội dung đã được thêm yêu cầu tóm tắt (Copy nội dung này)", language="text", lines=5, interactive=False)
                     
-                    gr.Markdown("### Mở nhanh các trình chat AI:", elem_classes="ai-links")
+                    gr.Markdown("### 🚀 Mở nhanh các trình chat AI:", elem_classes="ai-links")
                     gr.HTML("""
                         <div class='ai-links'>
                             <a href='https://chatgpt.com' target='_blank'>🤖 ChatGPT</a>
@@ -127,8 +129,6 @@ def launch():
                             <a href='https://claude.ai' target='_blank'>🧠 Anthropic Claude</a>
                         </div>
                     """)
-                    
-                    prepare_btn = gr.Button("📝 Chuẩn bị nội dung tóm tắt cho AI bên ngoài")
                 
                 # Tab 2: Tóm tắt tự động trong ứng dụng
                 with gr.TabItem("🤖 Tóm tắt tự động"):
